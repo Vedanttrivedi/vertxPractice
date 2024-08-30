@@ -1,6 +1,7 @@
 package com.example.starter.eventBus;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
@@ -32,7 +33,8 @@ public class RequestResponse
     @Override
     public void start(Promise<Void> startPromise) throws Exception
     {
-      startPromise.complete();
+//      startPromise.complete();
+//      var vertx = Vertx.vertx();
       var eventBus = vertx.eventBus();
       eventBus.consumer(address,handler->
       {

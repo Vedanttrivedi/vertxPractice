@@ -6,6 +6,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 import java.time.Duration;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ProducerConsumer
 {
@@ -14,10 +16,9 @@ public class ProducerConsumer
   {
     var value = 10;
     var vertex = Vertx.vertx();
-    vertex.deployVerticle(new ConsumerVerticle());
     vertex.deployVerticle(
-      Consumer2Verticle.class.getName(),
-      new DeploymentOptions().setInstances(4)
+      ProduceVerticle.class.getName(),
+      new DeploymentOptions().setInstances(1000)
     );
     vertex.deployVerticle(new ProduceVerticle());
   }
@@ -29,11 +30,12 @@ public class ProducerConsumer
       startPromise.complete();
       JsonObject data = new JsonObject();
       data.put("Name","Vedant");
-
-      vertx.setPeriodic(Duration.ofSeconds(10).toMillis(),id->{
-        vertx.eventBus().publish(address,"This is data!!");
-      });
-      System.out.println("Producer Thread "+Thread.currentThread().getName());
+      System.out.println("Thread "+Thread.currentThread().getName());
+//
+//      vertx.setPeriodic(Duration.ofSeconds(10).toMillis(),id->{
+//        vertx.eventBus().publish(address,"This is data!!");
+//      });
+//      System.out.println("Producer Thread "+Thread.currentThread().getName());
     }
   }
 
@@ -42,6 +44,7 @@ public class ProducerConsumer
     @Override
     public void start() throws Exception
     {
+
       super.start();
       vertx.eventBus().consumer(address,handler->
       {

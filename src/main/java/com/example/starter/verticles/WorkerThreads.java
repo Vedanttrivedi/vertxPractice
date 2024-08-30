@@ -16,13 +16,16 @@ public class WorkerThreads extends AbstractVerticle
 
     vertx.deployVerticle(
       new WorkerThreads(),
-      new DeploymentOptions().setWorkerPoolName("MyWorkerThread").setWorker(true));
+      new DeploymentOptions().setWorkerPoolName("MyWorkerThread").setWorker(true) );
+    vertx.deployVerticle(new TestVerticle());
   }
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
     startPromise.complete();
-    vertx.executeBlocking(event -> {
+    vertx.executeBlocking(
+      event ->
+      {
       System.out.println("Inside the blocking code " + Thread.currentThread().getName());
 
       try {
